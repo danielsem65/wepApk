@@ -1,6 +1,7 @@
 package com.securepay.dashboard;
 
 import android.annotation.SuppressLint;
+import com.securepay.dashboard.BuildConfig;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import android.webkit.PermissionRequest;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
