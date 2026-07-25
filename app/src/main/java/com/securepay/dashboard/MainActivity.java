@@ -1,7 +1,6 @@
 package com.securepay.dashboard;
 
 import android.annotation.SuppressLint;
-import com.securepay.dashboard.BuildConfig;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
@@ -468,7 +467,11 @@ public class MainActivity extends AppCompatActivity {
     private class WebAppInterface {
         @JavascriptInterface
         public String getAppVersion() {
-            return BuildConfig.VERSION_NAME;
+            try {
+                return getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            } catch (Exception e) {
+                return "1.0.0";
+            }
         }
 
         @JavascriptInterface
