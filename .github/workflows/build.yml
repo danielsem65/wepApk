@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Android APKs
 
 on:
   push:
@@ -11,6 +11,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        flavor: [touchbase, tbdata]
 
     steps:
       - uses: actions/checkout@v4
@@ -30,33 +34,34 @@ jobs:
       - name: Grant execute permission
         run: chmod +x gradlew
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug
+      - name: Build ${{ matrix.flavor }} debug APK
+        run: ./gradlew assemble${{ matrix.flavor }}Debug
 
-      - name: Upload debug APK
+      - name: Upload ${{ matrix.flavor }} debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: TouchBase-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: ${{ matrix.flavor }}-debug
+          path: app/build/outputs/apk/${{ matrix.flavor }}/debug/app-${{ matrix.flavor }}-debug.apk
           if-no-files-found: error
 
-      - name: Build release APK
-        if: github.ref_type == 'tag'
-        run: ./gradlew assembleRelease
+      - name: Build ${{ matrix.flavor }} release APK
+        if: startsWith(github.ref, 'refs/tags/')
+        run: ./gradlew assemble${{ matrix.flavor }}Release
 
-      - name: Upload release APK
-        if: github.ref_type == 'tag'
+      - name: Upload ${{ matrix.flavor }} release APK
+        if: startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-artifact@v4
         with:
-          name: TouchBase-release-unsigned
-          path: app/build/outputs/apk/release/app-release-unsigned.apk
+          name: ${{ matrix.flavor }}-release
+          path: app/build/outputs/apk/${{ matrix.flavor }}/release/app-${{ matrix.flavor }}-release-unsigned.apk
           if-no-files-found: error
 
-      - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: softprops/action-gh-release@v2
         with:
-          files: |
-            app/build/outputs/apk/debug/app-debug.apk
-            app/build/outputs/apk/release/app-release-unsigned.apk
           generate_release_notes: true

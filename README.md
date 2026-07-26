@@ -4,25 +4,27 @@ Android WebView wrappers for web apps, built automatically with GitHub Actions.
 
 ## How it works
 
-Each app is an Android project with a `WebView` that loads a URL and provides native features — JavaScript, file uploads, camera access, downloads, push notifications, and more.
+Each flavor in this repo wraps a different web app with a native `WebView` — JavaScript, file uploads, camera access, downloads, push notifications, and more.
 
-When you push to `main`, GitHub Actions builds the APK automatically. Download it from the **Actions** tab → click the latest run → **Artifacts**.
+When you push to `main`, GitHub Actions builds all flavors simultaneously. Download each APK from the **Actions** tab → click the latest run → **Artifacts**.
 
-## Current apps
+## Current flavors
 
-| App | URL | APK download |
-|-----|-----|-------------|
-| TouchBase | https://securepay-dashboard.pages.dev | `TouchBase-debug` artifact |
+| Flavor | App | URL | APK |
+|--------|-----|-----|-----|
+| `touchbase` | TouchBase | https://securepay-dashboard.pages.dev | `touchbase-debug` |
+| `tbdata` | TB Data | https://touchbasedata.com/ | `tbdata-debug` |
 
-## Adding a new app
+## Adding a new flavor
 
-1. Copy the `app/` folder to a new module or create a new project folder
-2. Update `MainActivity.java`:
-   - Change `APP_URL` to your target URL
-   - Adjust `setInitialScale()` if needed
-3. Update `strings.xml`, `colors.xml`, icon files
-4. Update `app/build.gradle.kts` (applicationId, app name, etc.)
-5. Push — the workflow builds all modules automatically
+1. Add a new `create("flavorName")` block in `app/build.gradle.kts`
+2. Create `app/src/flavorName/res/values/strings.xml` with:
+   - `app_name` — display name of the app
+   - `app_url` — URL the WebView loads
+3. Add icons in `app/src/flavorName/res/mipmap-*/ic_launcher.png` (48–192px, with ~20% padding)
+4. Push — the workflow builds it automatically
+
+Available on every build (no tag needed): the debug APK, downloadable from the workflow run's **Artifacts** section.
 
 ## Features baked in
 
@@ -37,3 +39,4 @@ When you push to `main`, GitHub Actions builds the APK automatically. Download i
 - Push notification permission (Android 13+)
 - Deep linking support
 - Back button navigation with exit prompt
+- 60% initial scale to fit content

@@ -7,11 +7,23 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.securepay.dashboard"
         minSdk = 21
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0.0"
+    }
+
+    flavorDimensions("app")
+    productFlavors {
+        create("touchbase") {
+            dimension = "app"
+            applicationId = "com.securepay.dashboard"
+            versionName = "1.0.0"
+        }
+        create("tbdata") {
+            dimension = "app"
+            applicationId = "com.tbdata.app"
+            versionName = "1.0.0"
+        }
     }
 
     buildTypes {

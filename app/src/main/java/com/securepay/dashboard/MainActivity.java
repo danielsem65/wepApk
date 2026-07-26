@@ -57,13 +57,13 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int FILE_CHOOSER_REQUEST_CODE = 1;
     private static final int PERMISSION_REQUEST_CODE = 2;
-    private static final String APP_URL = "https://securepay-dashboard.pages.dev";
 
     private WebView webView;
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
     private FrameLayout videoContainer;
     private View customView;
+    private String appUrl;
 
     private ValueCallback<Uri[]> filePathCallback;
     private ValueCallback<Uri> filePathCallbackSingle;
@@ -81,12 +81,14 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipeRefresh);
         videoContainer = findViewById(R.id.videoContainer);
 
+        appUrl = getString(R.string.app_url);
+
         setupWebView();
         setupSwipeRefresh();
         setupDownloadListener();
 
         if (savedInstanceState == null) {
-            loadUrl(APP_URL);
+            loadUrl(appUrl);
         }
 
         checkPermissions();
@@ -188,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadUrl(String url) {
         if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            url = APP_URL;
+            url = appUrl;
         }
         webView.loadUrl(url);
     }
