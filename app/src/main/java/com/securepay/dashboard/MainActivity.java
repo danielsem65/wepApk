@@ -32,6 +32,8 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.JsPromptResult;
+import android.webkit.JsResult;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
@@ -379,6 +381,45 @@ public class MainActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.GONE);
                 }
             }
+        }
+
+        @Override
+        public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+            new AlertDialog.Builder(MainActivity.this, R.style.CustomAlertDialog)
+                .setTitle("Info")
+                .setMessage(message)
+                .setPositiveButton("OK", (dialog, which) -> result.confirm())
+                .setOnDismissListener(dialog -> result.confirm())
+                .show();
+            return true;
+        }
+
+        @Override
+        public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
+            new AlertDialog.Builder(MainActivity.this, R.style.CustomAlertDialog)
+                .setTitle("Confirm")
+                .setMessage(message)
+                .setPositiveButton("Yes", (dialog, which) -> result.confirm())
+                .setNegativeButton("No", (dialog, which) -> result.cancel())
+                .setOnDismissListener(dialog -> result.cancel())
+                .show();
+            return true;
+        }
+
+        @Override
+        public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
+            android.widget.EditText input = new android.widget.EditText(MainActivity.this);
+            input.setText(defaultValue != null ? defaultValue : "");
+
+            new AlertDialog.Builder(MainActivity.this, R.style.CustomAlertDialog)
+                .setTitle("Prompt")
+                .setMessage(message)
+                .setView(input)
+                .setPositiveButton("OK", (dialog, which) -> result.confirm(input.getText().toString()))
+                .setNegativeButton("Cancel", (dialog, which) -> result.cancel())
+                .setOnDismissListener(dialog -> result.cancel())
+                .show();
+            return true;
         }
 
         @Override
