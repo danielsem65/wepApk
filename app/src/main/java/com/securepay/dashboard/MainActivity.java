@@ -35,8 +35,10 @@ import android.webkit.WebView;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -124,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         CookieManager.getInstance().setAcceptCookie(true);
         CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
 
+        webView.setInitialScale(80);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         webView.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
 
@@ -385,9 +388,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+            View content = View.inflate(MainActivity.this, R.layout.dialog_alert, null);
+            ((TextView) content.findViewById(R.id.dialog_title)).setText("Info");
+            ((TextView) content.findViewById(R.id.dialog_message)).setText(message);
+
             new AlertDialog.Builder(MainActivity.this, R.style.CustomAlertDialog)
-                .setTitle("Info")
-                .setMessage(message)
+                .setView(content)
                 .setPositiveButton("OK", (dialog, which) -> result.confirm())
                 .setOnDismissListener(dialog -> result.confirm())
                 .show();
@@ -396,9 +402,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
+            View content = View.inflate(MainActivity.this, R.layout.dialog_alert, null);
+            ((TextView) content.findViewById(R.id.dialog_title)).setText("Confirm");
+            ((TextView) content.findViewById(R.id.dialog_message)).setText(message);
+
             new AlertDialog.Builder(MainActivity.this, R.style.CustomAlertDialog)
-                .setTitle("Confirm")
-                .setMessage(message)
+                .setView(content)
                 .setPositiveButton("Yes", (dialog, which) -> result.confirm())
                 .setNegativeButton("No", (dialog, which) -> result.cancel())
                 .setOnDismissListener(dialog -> result.cancel())
@@ -408,13 +417,14 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
-            android.widget.EditText input = new android.widget.EditText(MainActivity.this);
+            View content = View.inflate(MainActivity.this, R.layout.dialog_prompt, null);
+            ((TextView) content.findViewById(R.id.dialog_title)).setText("Prompt");
+            ((TextView) content.findViewById(R.id.dialog_message)).setText(message);
+            EditText input = content.findViewById(R.id.dialog_input);
             input.setText(defaultValue != null ? defaultValue : "");
 
             new AlertDialog.Builder(MainActivity.this, R.style.CustomAlertDialog)
-                .setTitle("Prompt")
-                .setMessage(message)
-                .setView(input)
+                .setView(content)
                 .setPositiveButton("OK", (dialog, which) -> result.confirm(input.getText().toString()))
                 .setNegativeButton("Cancel", (dialog, which) -> result.cancel())
                 .setOnDismissListener(dialog -> result.cancel())
