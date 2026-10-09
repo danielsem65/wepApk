@@ -14,6 +14,7 @@ When you push to `main`, GitHub Actions builds all flavors simultaneously. Downl
 |--------|-----|-----|-----|
 | `touchbase` | TouchBase | https://securepay-dashboard.pages.dev | `touchbase-debug` |
 | `tbdata` | TB Data | https://touchbasedata.com/ | `tbdata-debug` |
+| `appliances` | Appliances Admin | https://touchbase.site.je/M | `appliances-debug` |
 
 ## Adding a new flavor
 

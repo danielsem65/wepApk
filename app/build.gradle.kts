@@ -24,6 +24,11 @@ android {
             applicationId = "com.tbdata.app"
             versionName = "1.0.0"
         }
+        create("appliances") {
+            dimension = "app"
+            applicationId = "com.touchbase.appliances.admin"
+            versionName = "1.0.0"
+        }
     }
 
     buildTypes {

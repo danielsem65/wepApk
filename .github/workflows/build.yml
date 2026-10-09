@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        flavor: [touchbase, tbdata]
+        flavor: [touchbase, tbdata, appliances]
 
     steps:
       - uses: actions/checkout@v4
